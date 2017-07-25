@@ -16,3 +16,6 @@
 [submodule "admin-webapp"]
 	path = admin-webapp
 	url = https://github.com/Madek/madek_admin-webapp.git
+[submodule "exporter"]
+	path = exporter
+	url = https://github.com/Madek/madek-exporter.git
