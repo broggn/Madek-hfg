@@ -3,7 +3,7 @@
 TAG=$1
 
 git checkout $TAG \
-  && git submodule update --init --recursive \
+  && git submodule update --init --recursive --force \
   && git submodule foreach --recursive "\
     git tag --sign -m Madek-$TAG Madek-$TAG HEAD \
     && git push origin --tags \
