@@ -133,3 +133,44 @@ jobs:
           include:
             - path: cider-ci/context-components/merge-checks.yml
               submodule: [api, datalayer]
+
+  # TMP overrides:
+  handson_dump:
+    name: "HANDSON DUMP"
+    include:
+      - path: cider-ci/jobs/deploy-defaults.yml
+        submodule: [deploy]
+
+    run_when:
+      "deploy at 5:30 UTC":
+        type: cron
+        value: "30 5 * * *"
+        branch_include_match: ^mfa/handson$
+        rerun: true
+
+    context:
+      tasks:
+        deploy:
+          exclusive_global_resources:
+            "test.madek.zhdk.ch": true
+          environment_variables:
+            HOSTS_FILE: inventories/zhdk/hosts_test
+            DROP_DATABASE: "true"
+            RESTORE_STRUCTURE_AND_DATA: "true"
+
+          scripts:
+            deploy:
+              body: echo SKIP - already done nightly!
+
+            handson_dump:
+              start_when:
+                "is deployed":
+                  script_key: deploy
+                  states: [passed]
+              ignore_state: true
+              timeout: 10 minutes
+              body: |
+                cd deploy
+                bin/ansible-playbook -v \
+                  -i "${HOSTS_FILE}" play_maintenance.yml \
+                  -e 'ruby_script=../dev/tmp_handson_dump.rb'
