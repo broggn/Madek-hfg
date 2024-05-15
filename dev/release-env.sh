@@ -1,6 +1,6 @@
 #!/bin/sh -exu
 
-export DEV_INITIALS=uvb
+export DEV_INITIALS=mk
 export RELEASE_MAJOR_MINOR=4.4
 export RELEASE_PATCH=4
 export RELEASE_PRE='' # '-RC.1'; or '' for stable release
